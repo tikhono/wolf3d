@@ -33,6 +33,12 @@ typedef struct		s_data
 	int				map_w;
 	int				map_h;
 	int				**map;
+	double			cam_x;
+	double			cam_y;
+	double			dir_x;
+	double			dir_y;
+	double			new_time;
+	double			old_time;
 }					t_data;
 
 typedef struct		s_mlx
@@ -55,16 +61,9 @@ typedef struct		s_all
 int					call_hookers(int key, t_all *a);
 int					exit_mouse(void);
 int					convert_to_int(t_vec3 color);
+void				render(t_all *a);
 void				init(t_all *a, char *file);
 void				parse(t_all *a);
 void				put_pixel(t_all *a, int x, int y, int color);
-
-double				product(t_vec3 a, t_vec3 b);
-double				length(t_vec3 a);
-t_vec3				normalize(t_vec3 a);
-t_vec3				substract(t_vec3 a, t_vec3 b);
-t_vec3				add(t_vec3 a, t_vec3 b);
-t_vec3				multiply(t_vec3 a, double k);
-t_vec3				rotate(t_vec3 vec, t_vec3 rot);
 
 #endif

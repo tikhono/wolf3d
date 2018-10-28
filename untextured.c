@@ -46,14 +46,6 @@ int worldMap[mapWidth][mapHeight]=
 
 int main(int /*argc*/, char * /*argv*/[])
 {
-  double posX = 22, posY = 12;  //x and y start position
-  double dirX = -1, dirY = 0; //initial direction vector
-  double planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
-
-  double time = 0; //time of current frame
-  double oldTime = 0; //time of previous frame
-
-  screen(512, 384, 0, "Raycaster");
   while(!done())
   {
     for(int x = 0; x < w; x++)
@@ -63,8 +55,8 @@ int main(int /*argc*/, char * /*argv*/[])
       double rayDirX = dirX + planeX * cameraX;
       double rayDirY = dirY + planeY * cameraX;
       //which box of the map we're in
-      int mapX = int(posX);
-      int mapY = int(posY);
+      int mapX = int(cam_x);
+      int mapY = int(cam_y);
 
       //length of ray from current position to next x or y-side
       double sideDistX;
@@ -85,22 +77,22 @@ int main(int /*argc*/, char * /*argv*/[])
       if (rayDirX < 0)
       {
         stepX = -1;
-        sideDistX = (posX - mapX) * deltaDistX;
+        sideDistX = (cam_x - mapX) * deltaDistX;
       }
       else
       {
         stepX = 1;
-        sideDistX = (mapX + 1.0 - posX) * deltaDistX;
+        sideDistX = (mapX + 1.0 - cam_x) * deltaDistX;
       }
       if (rayDirY < 0)
       {
         stepY = -1;
-        sideDistY = (posY - mapY) * deltaDistY;
+        sideDistY = (cam_y - mapY) * deltaDistY;
       }
       else
       {
         stepY = 1;
-        sideDistY = (mapY + 1.0 - posY) * deltaDistY;
+        sideDistY = (mapY + 1.0 - cam_y) * deltaDistY;
       }
       //perform DDA
       while (hit == 0)
@@ -122,8 +114,8 @@ int main(int /*argc*/, char * /*argv*/[])
         if (worldMap[mapX][mapY] > 0) hit = 1;
       }
       //Calculate distance projected on camera direction (Euclidean distance will give fisheye effect!)
-      if (side == 0) perpWallDist = (mapX - posX + (1 - stepX) / 2) / rayDirX;
-      else           perpWallDist = (mapY - posY + (1 - stepY) / 2) / rayDirY;
+      if (side == 0) perpWallDist = (mapX - cam_x + (1 - stepX) / 2) / rayDirX;
+      else           perpWallDist = (mapY - cam_y + (1 - stepY) / 2) / rayDirY;
 
       //Calculate height of line to draw on screen
       int lineHeight = (int)(h / perpWallDist);
@@ -166,14 +158,14 @@ int main(int /*argc*/, char * /*argv*/[])
     //move forward if no wall in front of you
     if (keyDown(SDLK_UP))
     {
-      if(worldMap[int(posX + dirX * moveSpeed)][int(posY)] == false) posX += dirX * moveSpeed;
-      if(worldMap[int(posX)][int(posY + dirY * moveSpeed)] == false) posY += dirY * moveSpeed;
+      if(worldMap[int(cam_x + dirX * moveSpeed)][int(cam_y)] == false) cam_x += dirX * moveSpeed;
+      if(worldMap[int(cam_x)][int(cam_y + dirY * moveSpeed)] == false) cam_y += dirY * moveSpeed;
     }
     //move backwards if no wall behind you
     if (keyDown(SDLK_DOWN))
     {
-      if(worldMap[int(posX - dirX * moveSpeed)][int(posY)] == false) posX -= dirX * moveSpeed;
-      if(worldMap[int(posX)][int(posY - dirY * moveSpeed)] == false) posY -= dirY * moveSpeed;
+      if(worldMap[int(cam_x - dirX * moveSpeed)][int(cam_y)] == false) cam_x -= dirX * moveSpeed;
+      if(worldMap[int(cam_x)][int(cam_y - dirY * moveSpeed)] == false) cam_y -= dirY * moveSpeed;
     }
     //rotate to the right
     if (keyDown(SDLK_RIGHT))
@@ -199,4 +191,3 @@ int main(int /*argc*/, char * /*argv*/[])
     }
   }
 }
-

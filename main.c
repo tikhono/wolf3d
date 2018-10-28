@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/10 15:56:24 by atikhono          #+#    #+#             */
-/*   Updated: 2018/10/28 18:52:11 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/10/28 19:19:13 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,14 @@ void	init(t_all *a, char *file)
 
 	a->d.width = 1200;
 	a->d.height = 600;
+	a->d.cam_x = 0;
+	a->d.cam_y = 0;
+	a->d.dir_x = 1;
+	a->d.dir_y = 0;
+	a->d.plane_x = 0;
+	a->d.plane_y = 0.66;
+	a->d.new_time = 0;
+	a->d.old_time = 0;
 	a->p.mlx = mlx_init();
 	a->p.win = mlx_new_window(a->p.mlx, a->d.width, a->d.height, file);
 	a->p.img = mlx_new_image(a->p.mlx, a->d.width, a->d.height);
@@ -42,9 +50,16 @@ void	init(t_all *a, char *file)
 void	parse_map(t_all *a, char *file)
 {
 
-	a->d.map_w = 10;
-	a->d.map_h = 10;
-
+	a->d.map_w = 5;
+	a->d.map_h = 5;
+	a->d.map = 
+	{
+		{1, 1, 1, 1, 1},
+		{1, 2, 0, 2, 1},
+		{1, 0, 0, 0, 1},
+		{1, 2, 0, 2, 1},
+		{1, 1, 1, 1, 1}
+	};
 
 }
 
@@ -63,6 +78,7 @@ int		main(int ac, char **av)
 	parse_map(&a, av[ac]);
 	init(&a, av[ac]);
 	put_help(&a);
+	render(&a);
 	mlx_hook(a.p.win, 2, 5, call_hookers, &a);
 	mlx_hook(a.p.win, 17, 1L << 17, exit_mouse, &a);
 	mlx_loop(a.p.mlx);
