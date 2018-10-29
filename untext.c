@@ -16,7 +16,7 @@ g++ *.cpp -lSDL
 #define mapWidth 24
 #define mapHeight 24
 
-int worldMap[mapWidth][mapHeight]=
+int map[mapWidth][mapHeight]=
 {
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -46,89 +46,95 @@ int worldMap[mapWidth][mapHeight]=
 
 int main(int /*argc*/, char * /*argv*/[])
 {
+  double pos_x = 22, pos_y = 12;  //x and y start position
+  double dir_x = -1, dir_y = 0; //initial direction vector
+  double plane_x = 0, plane_y = 0.66; //the 2d raycaster version of camera plane
+  double time = 0; //time of current frame
+  double oldTime = 0; //time of previous frame
+
   while(!done())
   {
     for(int x = 0; x < w; x++)
     {
       //calculate ray position and direction
-      double cameraX = 2 * x / double(w) - 1; //x-coordinate in camera space
-      double rayDirX = dirX + planeX * cameraX;
-      double rayDirY = dirY + planeY * cameraX;
+      double cam_x = 2 * x / double(w) - 1; //x-coordinate in camera space
+      double ray_dir_x = dir_x + plane_x * cam_x;
+      double ray_dir_y = dir_y + plane_y * cam_x;
       //which box of the map we're in
-      int mapX = int(cam_x);
-      int mapY = int(cam_y);
+      int map_x = int(pos_x);
+      int map_y = int(pos_y);
 
       //length of ray from current position to next x or y-side
-      double sideDistX;
-      double sideDistY;
+      double side_d_x;
+      double side_d_y;
 
-      //length of ray from one x or y-side to next x or y-side
-      double deltaDistX = std::abs(1 / rayDirX);
-      double deltaDistY = std::abs(1 / rayDirY);
-      double perpWallDist;
+       //length of ray from one x or y-side to next x or y-side
+      double dx = std::abs(1 / ray_dir_x);
+      double dy = std::abs(1 / ray_dir_y);
+      double wall_dist;
 
       //what direction to step in x or y-direction (either +1 or -1)
-      int stepX;
-      int stepY;
+      int step_x;
+      int step_y;
 
       int hit = 0; //was there a wall hit?
       int side; //was a NS or a EW wall hit?
       //calculate step and initial sideDist
-      if (rayDirX < 0)
+      if (ray_dir_x < 0)
       {
-        stepX = -1;
-        sideDistX = (cam_x - mapX) * deltaDistX;
+        step_x = -1;
+        side_d_x = (pos_x - map_x) * dx;
       }
       else
       {
-        stepX = 1;
-        sideDistX = (mapX + 1.0 - cam_x) * deltaDistX;
+        step_x = 1;
+        side_d_x = (map_x + 1.0 - pos_x) * dx;
       }
-      if (rayDirY < 0)
+      if (ray_dir_y < 0)
       {
-        stepY = -1;
-        sideDistY = (cam_y - mapY) * deltaDistY;
+        step_y = -1;
+        side_d_y = (pos_y - map_y) * dy;
       }
       else
       {
-        stepY = 1;
-        sideDistY = (mapY + 1.0 - cam_y) * deltaDistY;
+        step_y = 1;
+        side_d_y = (map_y + 1.0 - pos_y) * dy;
       }
       //perform DDA
       while (hit == 0)
       {
         //jump to next map square, OR in x-direction, OR in y-direction
-        if (sideDistX < sideDistY)
+        if (side_d_x < side_d_y)
         {
-          sideDistX += deltaDistX;
-          mapX += stepX;
+          side_d_x += dx;
+          map_x += step_x;
           side = 0;
         }
         else
         {
-          sideDistY += deltaDistY;
-          mapY += stepY;
+          side_d_y += dy;
+          map_y += step_y;
           side = 1;
         }
         //Check if ray has hit a wall
-        if (worldMap[mapX][mapY] > 0) hit = 1;
+        if (map[map_x][map_y] > 0) hit = 1;
       }
       //Calculate distance projected on camera direction (Euclidean distance will give fisheye effect!)
-      if (side == 0) perpWallDist = (mapX - cam_x + (1 - stepX) / 2) / rayDirX;
-      else           perpWallDist = (mapY - cam_y + (1 - stepY) / 2) / rayDirY;
+      if (side == 0) wall_dist = (map_x - pos_x + (1 - step_x) / 2) / ray_dir_x;
+      else           wall_dist = (map_y - pos_y + (1 - step_y) / 2) / ray_dir_y;
 
       //Calculate height of line to draw on screen
-      int lineHeight = (int)(h / perpWallDist);
+      int line_h = (int)(h / wall_dist);
 
       //calculate lowest and highest pixel to fill in current stripe
-      int drawStart = -lineHeight / 2 + h / 2;
-      if(drawStart < 0)drawStart = 0;
-      int drawEnd = lineHeight / 2 + h / 2;
-      if(drawEnd >= h)drawEnd = h - 1;
+      int draw_a = -line_h / 2 + h / 2;
+      if(draw_a < 0)draw_a = 0;
+      int draw_b = line_h / 2 + h / 2;
+      if(draw_b >= h)draw_b = h - 1;
 
       //choose wall color
       ColorRGB color;
-      switch(worldMap[mapX][mapY])
+      switch(map[map_x][map_y])
       {
         case 1:  color = RGB_Red;  break; //red
         case 2:  color = RGB_Green;  break; //green
@@ -141,7 +147,7 @@ int main(int /*argc*/, char * /*argv*/[])
       if (side == 1) {color = color / 2;}
 
       //draw the pixels of the stripe as a vertical line
-      verLine(x, drawStart, drawEnd, color);
+      verLine(x, draw_a, draw_b, color);
     }
     //timing for input and FPS counter
     oldTime = time;
@@ -152,42 +158,43 @@ int main(int /*argc*/, char * /*argv*/[])
     cls();
 
     //speed modifiers
-    double moveSpeed = frameTime * 5.0; //the constant value is in squares/second
-    double rotSpeed = frameTime * 3.0; //the constant value is in radians/second
+    double speed = frameTime * 5.0; //the constant value is in squares/second
+    double rot = frameTime * 3.0; //the constant value is in radians/second
     readKeys();
     //move forward if no wall in front of you
     if (keyDown(SDLK_UP))
     {
-      if(worldMap[int(cam_x + dirX * moveSpeed)][int(cam_y)] == false) cam_x += dirX * moveSpeed;
-      if(worldMap[int(cam_x)][int(cam_y + dirY * moveSpeed)] == false) cam_y += dirY * moveSpeed;
+      if(map[int(pos_x + dir_x * speed)][int(pos_y)] == false) pos_x += dir_x * speed;
+      if(map[int(pos_x)][int(pos_y + dir_y * speed)] == false) pos_y += dir_y * speed;
     }
     //move backwards if no wall behind you
     if (keyDown(SDLK_DOWN))
     {
-      if(worldMap[int(cam_x - dirX * moveSpeed)][int(cam_y)] == false) cam_x -= dirX * moveSpeed;
-      if(worldMap[int(cam_x)][int(cam_y - dirY * moveSpeed)] == false) cam_y -= dirY * moveSpeed;
+      if(map[int(pos_x - dir_x * speed)][int(pos_y)] == false) pos_x -= dir_x * speed;
+      if(map[int(pos_x)][int(pos_y - dir_y * speed)] == false) pos_y -= dir_y * speed;
     }
     //rotate to the right
     if (keyDown(SDLK_RIGHT))
     {
       //both camera direction and camera plane must be rotated
-      double oldDirX = dirX;
-      dirX = dirX * cos(-rotSpeed) - dirY * sin(-rotSpeed);
-      dirY = oldDirX * sin(-rotSpeed) + dirY * cos(-rotSpeed);
-      double oldPlaneX = planeX;
-      planeX = planeX * cos(-rotSpeed) - planeY * sin(-rotSpeed);
-      planeY = oldPlaneX * sin(-rotSpeed) + planeY * cos(-rotSpeed);
+      double oldDirX = dir_x;
+      dir_x = dir_x * cos(-rot) - dir_y * sin(-rot);
+      dir_y = oldDirX * sin(-rot) + dir_y * cos(-rot);
+      double oldPlaneX = plane_x;
+      plane_x = plane_x * cos(-rot) - plane_y * sin(-rot);
+      plane_y = oldPlaneX * sin(-rot) + plane_y * cos(-rot);
     }
     //rotate to the left
     if (keyDown(SDLK_LEFT))
     {
       //both camera direction and camera plane must be rotated
-      double oldDirX = dirX;
-      dirX = dirX * cos(rotSpeed) - dirY * sin(rotSpeed);
-      dirY = oldDirX * sin(rotSpeed) + dirY * cos(rotSpeed);
-      double oldPlaneX = planeX;
-      planeX = planeX * cos(rotSpeed) - planeY * sin(rotSpeed);
-      planeY = oldPlaneX * sin(rotSpeed) + planeY * cos(rotSpeed);
+      double oldDirX = dir_x;
+      dir_x = dir_x * cos(rot) - dir_y * sin(rot);
+      dir_y = oldDirX * sin(rot) + dir_y * cos(rot);
+      double oldPlaneX = plane_x;
+      plane_x = plane_x * cos(rot) - plane_y * sin(rot);
+      plane_y = oldPlaneX * sin(rot) + plane_y * cos(rot);
     }
   }
 }
+

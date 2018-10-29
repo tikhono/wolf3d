@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 11:27:07 by atikhono          #+#    #+#             */
-/*   Updated: 2018/10/28 20:04:18 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/10/29 12:59:30 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,21 @@
 
 int		call_hookers(int key, t_all *a)
 {
+
 	if (key == 53)
 	{
 		exit(0);
 		return (0);
 	}
 	if (key == 123)
-		a->d
+		rotate_left(a);
 	if (key == 124)
-		a->d.off_x += 0.1 * a->d.scale;
+		rotate_right(a);
 	if (key == 125)
-		a->d.off_y += 0.1 * a->d.scale;
+		move_forw(a);
 	if (key == 126)
-		a->d.off_y -= 0.1 * a->d.scale;
+		move_back(a);
+	printf("%f %f\t%f\n", a->d.pos_x, a->d.pos_y, a->d.speed);
 	return (0);
 }
 

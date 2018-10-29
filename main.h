@@ -9,6 +9,7 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <mlx.h>
+# include <sys/time.h>
 # include "./libft/libft.h"
 
 struct s_all;
@@ -33,12 +34,26 @@ typedef struct		s_data
 	int				map_w;
 	int				map_h;
 	int				**map;
-	double			cam_x;
-	double			cam_y;
+	int				time;
+	double			pos_x;
+	double			pos_y;
 	double			dir_x;
 	double			dir_y;
-	double			new_time;
-	double			old_time;
+	double			plane_x;
+	double			plane_y;
+	double			cam_x;
+	double			cam_y;
+	double			ray_dir_x;
+	double			ray_dir_y;
+	double			map_x;
+	double			map_y;
+	double			side_d_x;
+	double			side_d_y;
+	double			dx;
+	double			dy;
+	double			wall_dist;
+	double			speed;
+	double			rot;
 }					t_data;
 
 typedef struct		s_mlx
@@ -60,10 +75,14 @@ typedef struct		s_all
 
 int					call_hookers(int key, t_all *a);
 int					exit_mouse(void);
-int					convert_to_int(t_vec3 color);
 void				render(t_all *a);
 void				init(t_all *a, char *file);
 void				parse(t_all *a);
 void				put_pixel(t_all *a, int x, int y, int color);
+
+void				rotate_left(t_all *a);
+void				rotate_right(t_all *a);
+void				move_forw(t_all *a);
+void				move_back(t_all *a);
 
 #endif
