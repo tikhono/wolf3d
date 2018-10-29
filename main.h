@@ -12,21 +12,6 @@
 # include <sys/time.h>
 # include "./libft/libft.h"
 
-struct s_all;
-
-typedef struct		s_vec3
-{
-	double			x;
-	double			y;
-	double			z;
-}					t_vec3;
-
-typedef struct		s_range
-{
-	double			min;
-	double			max;
-}					t_range;
-
 typedef struct		s_data
 {
 	int				width;
@@ -34,7 +19,17 @@ typedef struct		s_data
 	int				map_w;
 	int				map_h;
 	int				**map;
+	int             hit;
+	int 			side;
 	int				time;
+	int 			step_x;
+	int 			step_y;
+	int				map_x;
+	int				map_y;
+	int 			line_h;
+	int 			h;
+	int 			draw_a;
+	int 			draw_b;
 	double			pos_x;
 	double			pos_y;
 	double			dir_x;
@@ -45,8 +40,6 @@ typedef struct		s_data
 	double			cam_y;
 	double			ray_dir_x;
 	double			ray_dir_y;
-	double			map_x;
-	double			map_y;
 	double			side_d_x;
 	double			side_d_y;
 	double			dx;

@@ -53,8 +53,6 @@ void	put_help(t_all *a)
 	mlx_hook(a->p.win, 17, 1L << 17, exit_mouse, &a);
 }
 
-void	render(t_all *a)
-{
 //	int		temp_time;
 //	double	spf;
 
@@ -63,10 +61,6 @@ void	render(t_all *a)
 //	a->d.time = temp_time;
 //	a->d.speed = spf * 5.0;
 //	a->d.rot = spf * 3.0;
-	a->d.speed = 0.5;
-	a->d.rot = 5;
-
-}
 
 void	init(t_all *a, char *file)
 {
