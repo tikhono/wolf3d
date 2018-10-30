@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/10 15:56:24 by atikhono          #+#    #+#             */
-/*   Updated: 2018/10/29 14:37:20 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/10/30 19:11:21 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,62 +34,6 @@ void	put_help(t_all *a)
 //	a->d.speed = spf * 5.0;
 //	a->d.rot = spf * 3.0;
 
-void	copy_map(t_all *a, char *file, int fd)
-{
-	int 	i;
-	int 	j;
-	int 	k;
-	char	*line;
-
-	i = 0;
-	while (i < a->d.map_h)
-	{
-		j = 0;
-		k = 0;
-		if (!get_next_line(fd, &line))
-		{
-			fprintf(stderr, "Error in %s, incomplete row %d", file, i);
-			exit(-1);
-		}
-		while (j < a->d.map_w)
-		{
-			a->d.map[i][j] = ft_atoi_i(line, &k);
-			printf("%d ", a->d.map[i][j]);
-			++j;
-		}
-		printf("\n");
-		++i;
-	}
-	free(line);
-}
-
-void	parse_map(t_all *a, char *file)
-{
-	int 	fd;
-	int 	i;
-	char	*line;
-
-	fd = open(file, O_RDONLY);
-	if (fd < 0)
-	{
-		fprintf(stderr, "Failed to open: %s\n", file);
-		exit(-1);
-	}
-	get_next_line(fd, &line);
-	a->d.map_w = ft_atoi(line);
-	get_next_line(fd, &line);
-	a->d.map_h = ft_atoi(line);
-	get_next_line(fd, &line);
-	a->d.pos_x = ft_atoi(line);
-	get_next_line(fd, &line);
-	a->d.pos_y = ft_atoi(line);
-	free(line);
-	a->d.map = (int **)malloc(sizeof(int *) * a->d.map_h);
-	i = 0;
-	while (i < a->d.map_w)
-		a->d.map[i++] = (int *)malloc(sizeof(int) * a->d.map_w);
-	copy_map(a, file, fd);
-}
 
 void	init(t_all *a, char *file)
 {
@@ -99,9 +43,10 @@ void	init(t_all *a, char *file)
 
 	a->d.width = WIDTH;
 	a->d.height = HEIGHT;
+	a->d.tex_w = 64;
+	a->d.tex_h = 64;
 	a->d.h = HEIGHT;
 	a->d.cam_x = 0;
-	a->d.cam_y = 0;
 	a->d.dir_x = -1;
 	a->d.dir_y = 0;
 	a->d.plane_x = 0;
@@ -126,8 +71,8 @@ int		main(int ac, char **av)
 		else
 			break ;
 	--ac;
-	parse_map(&a, av[ac]);
 	init(&a, av[ac]);
+	parse_map(&a, av[ac]);
 //	put_help(&a);
 	render(&a);
 	mlx_hook(a.p.win, 2, 5, call_hookers, &a);

@@ -19,6 +19,7 @@ typedef struct		s_data
 	int				map_w;
 	int				map_h;
 	int				**map;
+	int 			**tex;
 	int             hit;
 	int 			side;
 	int 			step_x;
@@ -29,6 +30,11 @@ typedef struct		s_data
 	int 			h;
 	int 			draw_a;
 	int 			draw_b;
+	int 			tex_id;
+	int 			tex_x;
+	int 			tex_y;
+	int 			tex_w;
+	int 			tex_h;
 	clock_t			time;
 	double			pos_x;
 	double			pos_y;
@@ -37,7 +43,7 @@ typedef struct		s_data
 	double			plane_x;
 	double			plane_y;
 	double			cam_x;
-	double			cam_y;
+	double			wall_x;
 	double			ray_dir_x;
 	double			ray_dir_y;
 	double			side_d_x;

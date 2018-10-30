@@ -6,78 +6,104 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/29 17:57:48 by atikhono          #+#    #+#             */
-/*   Updated: 2018/10/28 17:39:35 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/10/30 19:11:14 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-void	ft_exit(char *file, int i, int j)
+void	copy_map(t_all *a, char *file, int fd)
 {
-	++i;
-	++j;
-	fprintf(stderr, "Error in %s, value at row: %i, col: %i\n", file, i, j);
-	exit(-1);
-}
-
-void	put(t_pix ***arr, char **buf, t_buff_i *b, char *file)
-{
-	char	**temp;
-
-	while (buf[b->j] != NULL)
-	{
-		temp = ft_strsplit(buf[b->j], ',');
-		if (ft_num_of_rows(temp) > 2 || !ft_isnum(temp[0], 10))
-			ft_exit(file, b->i, b->j);
-		if (ft_strchr(buf[b->j], ',') != NULL)
-			if (*(ft_strchr(buf[b->j], ',') + 1) != '0')
-				ft_exit(file, b->i, b->j);
-		if (temp[1] != NULL)
-			if ((!ft_isnum(temp[1], 16)) || (ft_strlen(temp[1]) >= 10))
-				ft_exit(file, b->i, b->j);
-		arr[b->i][b->j] = (t_pix *)malloc(sizeof(t_pix));
-		arr[b->i][b->j]->oz = ft_atoi(temp[0]);
-		arr[b->i][b->j]->x = b->j;
-		arr[b->i][b->j]->y = b->i;
-		arr[b->i][b->j]->z = arr[b->i][b->j]->oz;
-		free(buf[b->j++]);
-	}
-}
-
-t_pix	***fill(t_pix ***arr, int fd, t_buff_i *b, char *file)
-{
+	int 	i;
+	int 	j;
+	int 	k;
 	char	*line;
-	char	**buf;
-	int		rows;
 
-	while (get_next_line(fd, &line))
+	i = 0;
+	while (i < a->d.map_h)
 	{
-		buf = ft_strsplit(line, ' ');
-		free(line);
-		b->j = 0;
-		rows = ft_num_of_rows(buf);
-		if (b->i == 0)
-			b->c = rows;
-		else if (b->c != rows)
-			ft_exit(file, b->i, b->j);
-		arr[b->i] = (t_pix **)malloc(sizeof(t_pix *) * (rows + 1));
-		arr[b->i][rows] = NULL;
-		put(arr, buf, b, file);
-		free(buf);
-		++b->i;
+		j = 0;
+		k = 0;
+		if (!get_next_line(fd, &line))
+		{
+			fprintf(stderr, "Error in %s, incomplete row %d", file, i);
+			exit(-1);
+		}
+		while (j < a->d.map_w)
+		{
+			a->d.map[i][j] = ft_atoi_i(line, &k);
+			//printf("%d ", a->d.map[i][j]);
+			++j;
+		}
+		printf("\n");
+		++i;
 	}
-	close(fd);
 	free(line);
-	if ((arr[0][1] == NULL && arr[1] == NULL))
-		ft_exit(file, 0, 0);
-	return (arr);
 }
 
-t_pix	***parse(char *file)
+void	parse_metadata(t_all *a, char * file, int fd, char *line)
 {
-	int			fd;
-	int			rows;
-	t_buff_i	b;
+	get_next_line(fd, &line);
+	a->d.map_w = ft_atoi(line);
+	get_next_line(fd, &line);
+	a->d.map_h = ft_atoi(line);
+	get_next_line(fd, &line);
+	a->d.pos_x = ft_atoi(line);
+	get_next_line(fd, &line);
+	a->d.pos_y = ft_atoi(line);
+	if (a->d.map_w <= 3 || a->d.map_h <= 3)
+	{
+		fprintf(stderr, "Failed to open: %s, wrong map size", file);
+		exit(-1);
+	}
+	if (a->d.pos_x < 0 || a->d.pos_y < 0)
+	{
+		fprintf(stderr, "Position can`t be beyond of map");
+		exit(-1);
+	}
+	if (a->d.pos_x > a->d.map_w || a->d.pos_y > a->d.map_h)
+	{
+		fprintf(stderr, "Position can`t be beyond of map");
+		exit(-1);
+	}
+	free(line);
+}
+
+void	parse_tex(t_all *a)
+{
+	int 	w;
+	int 	h;
+	int 	x;
+	int 	y;
+	int 	z;
+	void		*lol;
+
+	w = 0;
+	h = 0;
+	a->d.tex = (int **)malloc(sizeof(int *) * 8);
+	lol = mlx_xpm_file_to_image(a->p.mlx, "./greystone.xpm", &w, &h);
+	a->d.tex[0] = (int *)mlx_get_data_addr(lol, &x, &y, &z);
+	lol = mlx_xpm_file_to_image(a->p.mlx, "./greystone.xpm", &w, &h);
+	a->d.tex[1] = (int *)mlx_get_data_addr(lol, &x, &y, &z);
+	lol = mlx_xpm_file_to_image(a->p.mlx, "./greystone.xpm", &w, &h);
+	a->d.tex[2] = (int *)mlx_get_data_addr(lol, &x, &y, &z);
+	lol = mlx_xpm_file_to_image(a->p.mlx, "./greystone.xpm", &w, &h);
+	a->d.tex[3] = (int *)mlx_get_data_addr(lol, &x, &y, &z);
+	lol = mlx_xpm_file_to_image(a->p.mlx, "./greystone.xpm", &w, &h);
+	a->d.tex[4] = (int *)mlx_get_data_addr(lol, &x, &y, &z);
+	lol = mlx_xpm_file_to_image(a->p.mlx, "./greystone.xpm", &w, &h);
+	a->d.tex[5] = (int *)mlx_get_data_addr(lol, &x, &y, &z);
+	lol = mlx_xpm_file_to_image(a->p.mlx, "./greystone.xpm", &w, &h);
+	a->d.tex[6] = (int *)mlx_get_data_addr(lol, &x, &y, &z);
+	lol = mlx_xpm_file_to_image(a->p.mlx, "./greystone.xpm", &w, &h);
+	a->d.tex[7] = (int *)mlx_get_data_addr(lol, &x, &y, &z);
+}
+
+void	parse_map(t_all *a, char *file)
+{
+	int 	fd;
+	int 	i;
+	char	*line;
 
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
@@ -85,6 +111,16 @@ t_pix	***parse(char *file)
 		fprintf(stderr, "Failed to open: %s\n", file);
 		exit(-1);
 	}
-
-	return (fill(arr, fd, &b, file));
+	parse_metadata(a, file, fd, line);
+	a->d.map = (int **)malloc(sizeof(int *) * a->d.map_h);
+	i = 0;
+	while (i < a->d.map_w)
+		a->d.map[i++] = (int *)malloc(sizeof(int) * a->d.map_w);
+	copy_map(a, file, fd);
+	if (a->d.map[(int)(a->d.pos_x)][(int)(a->d.pos_y)] != 0)
+	{
+		fprintf(stderr, "Wrong position: %s\n", file);
+		exit(-1);
+	}
+	parse_tex(a);
 }

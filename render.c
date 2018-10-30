@@ -52,7 +52,8 @@ void	dda1(t_all *a)
 
 void	draw(t_all *a, int x)
 {
-	int 	i;
+	int 	y;
+	int 	d;
 	int 	color;
 
 	a->d.line_h = (int)((double)(a->d.h) / a->d.wall_dist);
@@ -60,19 +61,30 @@ void	draw(t_all *a, int x)
 	a->d.draw_a = a->d.draw_a < 0 ? 0 : a->d.draw_a;
 	a->d.draw_b = (int)(a->d.line_h / 2.0 + (double)(a->d.h) / 2.0);
 	a->d.draw_b = a->d.draw_b >= (double)(a->d.h) ? a->d.h - 1 : a->d.draw_b;
-	switch(a->d.map[a->d.map_x][a->d.map_y])
+	a->d.tex_id = a->d.map[a->d.map_x][a->d.map_y];
+	if (a->d.side == 0)
+		a->d.wall_x = a->d.pos_y + a->d.wall_dist * a->d.ray_dir_y;
+	else
+		a->d.wall_x = a->d.pos_x + a->d.wall_dist * a->d.ray_dir_x;
+	a->d.wall_x -= floor(a->d.wall_x);
+	a->d.tex_x = (int)(a->d.wall_x * (double)(a->d.tex_w));
+	if (a->d.side == 0 && a->d.ray_dir_x > 0)
+		a->d.tex_x = a->d.tex_w - a->d.tex_x - 1;
+	if (a->d.side == 1 && a->d.ray_dir_y < 0)
+		a->d.tex_x = a->d.tex_w - a->d.tex_x - 1;
+	y = a->d.draw_a;
+	while (y < a->d.draw_b)
 	{
-		case 1:  color = 0x00ff0000;  break; //red
-		case 2:  color = 0x0000ff00;  break; //green
-		case 3:  color = 0x000000ff;   break; //blue
-		case 4:  color = 0x00ffffff;  break; //white
-		default: color = 0x00ff0000; break; //yellow
-	}
-	i = a->d.draw_a;
-	while (i < a->d.draw_b)
-	{
-		a->addr[WIDTH * i + x] = color;
-		++i;
+		d = y * 256 - a->d.h * 128 + a->d.line_h * 128;
+		a->d.tex_y = ((d * a->d.tex_h) / a->d.line_h) / 256;
+
+		a->d.tex_id = a->d.tex_id > 7 ? 7 : a->d.tex_id;
+		a->d.tex_id = a->d.tex_id < 0 ? 0 : a->d.tex_id;
+		color = a->d.tex[a->d.tex_id][a->d.tex_h * a->d.tex_y + a->d.tex_x];
+	//	if (a->d.side == 1)
+	//		color = (color >> 1) & 8355711;
+		a->addr[WIDTH * y + x] = color;
+		++y;
 	}
 }
 
@@ -80,7 +92,7 @@ void	render(t_all *a)
 {
 	int		x;
 
-	a->d.speed = 0.5;
+	a->d.speed = 0.2;
 	a->d.rot = 0.09;
 	ft_bzero(a->addr, HEIGHT * WIDTH * sizeof(int));
 	x = 0;

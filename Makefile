@@ -6,7 +6,7 @@
 #    By: atikhono <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/04/01 17:15:51 by atikhono          #+#    #+#              #
-#    Updated: 2018/10/29 13:00:22 by atikhono         ###   ########.fr        #
+#    Updated: 2018/10/30 19:13:13 by atikhono         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,9 @@ MLX = -lmlx -framework AppKit -framework OpenGL
 
 SRC =	main.c\
 		hookers.c\
-		move.c
+		move.c\
+		parser.c\
+		render.c
 
 all: liball $(NAME)
 
