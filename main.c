@@ -79,8 +79,9 @@ void	init(t_all *a, char *file)
 	//	printf("\n");
 		++i;
 	}
-	a->d.width = 1200;
-	a->d.height = 600;
+	a->d.width = WIDTH;
+	a->d.height = HEIGHT;
+	a->d.h = HEIGHT;
 	a->d.pos_x = 22;
 	a->d.pos_y = 12;
 	a->d.cam_x = 0;
@@ -116,7 +117,7 @@ int		main(int ac, char **av)
 	--ac;
 	parse_map(&a, av[ac]);
 	init(&a, av[ac]);
-	put_help(&a);
+//	put_help(&a);
 	render(&a);
 	mlx_hook(a.p.win, 2, 5, call_hookers, &a);
 	mlx_hook(a.p.win, 17, 1L << 17, exit_mouse, &a);

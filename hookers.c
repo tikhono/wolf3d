@@ -29,6 +29,7 @@ int		call_hookers(int key, t_all *a)
 	if (key == 126)
 		move_back(a);
 //	printf("%f %f\t%f\n", a->d.pos_x, a->d.pos_y, a->d.speed);
+	render(a);
 	return (0);
 }
 

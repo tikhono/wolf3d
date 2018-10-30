@@ -14,15 +14,15 @@ void	dda2(t_all *a)
 		{
 			a->d.side_d_y += a->d.dy;
 			a->d.map_y += a->d.step_y;
-			a->d.side = 0;
+			a->d.side = 1;
 		}
-		if (a->d.map[a->d.map_x][a->d.map_x] > 0)
+		if (a->d.map[a->d.map_x][a->d.map_y] > 0)
 			a->d.hit = 1;
-		if (a->d.side == 0)
-			a->d.wall_dist = (a->d.map_x - a->d.pos_x + (1.0 - a->d.step_x) / 2.0) / a->d.ray_dir_x;
-		else
-			a->d.wall_dist = (a->d.map_y - a->d.pos_y + (1.0 - a->d.step_y) / 2.0) / a->d.ray_dir_y;
 	}
+    if (a->d.side == 0)
+        a->d.wall_dist = (a->d.map_x - a->d.pos_x + (1.0 - a->d.step_x) / 2.0) / a->d.ray_dir_x;
+    else
+        a->d.wall_dist = (a->d.map_y - a->d.pos_y + (1.0 - a->d.step_y) / 2.0) / a->d.ray_dir_y;
 }
 
 void	dda1(t_all *a)
@@ -53,37 +53,25 @@ void	dda1(t_all *a)
 void	draw(t_all *a, int x)
 {
 	int 	i;
-	int 	j;
 	int 	color;
 
-	a->d.line_h = (int)(a->d.h / a->d.wall_dist);
-	a->d.draw_a = -a->d.line_h / 2 + a->d.h / 2;
+	a->d.line_h = (int)((double)(a->d.h) / a->d.wall_dist);
+	a->d.draw_a = (int)(-a->d.line_h / 2.0 + (double)(a->d.h) / 2.0);
 	a->d.draw_a = a->d.draw_a < 0 ? 0 : a->d.draw_a;
-	a->d.draw_b = -a->d.line_h / 2 + a->d.h / 2;
-	a->d.draw_b = a->d.draw_b >= a->d.h ? a->d.h - 1 : a->d.draw_b;
-	i = 0;
-	while (i < a->d.map_w)
-	{
-		j = 0;
-		while (j < a->d.map_h)
-		{
-			a->addr[a->d.map_w * i + j] = 0;
-			++j;
-		}
-		++i;
-	}
+	a->d.draw_b = (int)(a->d.line_h / 2.0 + (double)(a->d.h) / 2.0);
+	a->d.draw_b = a->d.draw_b >= (double)(a->d.h) ? a->d.h - 1 : a->d.draw_b;
 	switch(a->d.map[a->d.map_x][a->d.map_y])
 	{
-		case 1:  color = 0xff0000;  break; //red
-		case 2:  color = 0x00ff00;  break; //green
-		case 3:  color = 0x0000ff;   break; //blue
-		case 4:  color = 0xffffff;  break; //white
-		default: color = 0xffff00; break; //yellow
+		case 1:  color = 0x00ff0000;  break; //red
+		case 2:  color = 0x0000ff00;  break; //green
+		case 3:  color = 0x000000ff;   break; //blue
+		case 4:  color = 0x00ffffff;  break; //white
+		default: color = 0x0; break; //yellow
 	}
-	i = 0;
-	while (i < a->d.map_w)
+	i = a->d.draw_a;
+	while (i < a->d.draw_b)
 	{
-		a->addr[a->d.map_w * i + x] = color;
+		a->addr[WIDTH * i + x] = color;
 		++i;
 	}
 }
@@ -93,7 +81,8 @@ void	render(t_all *a)
 	int		x;
 
 	a->d.speed = 0.5;
-	a->d.rot = 5;
+	a->d.rot = 0.1;
+	ft_bzero(a->addr, HEIGHT * WIDTH * sizeof(int));
 	x = 0;
 	while (x < WIDTH)
 	{
@@ -105,7 +94,6 @@ void	render(t_all *a)
 		a->d.dx = fabs(1 / a->d.ray_dir_x);
 		a->d.dy = fabs(1 / a->d.ray_dir_y);
 		a->d.hit = 0;
-		a->d.h = 1;
 		dda1(a);
 		draw(a, x);
 		++x;

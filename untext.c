@@ -149,6 +149,10 @@ int main(int /*argc*/, char * /*argv*/[])
       //draw the pixels of the stripe as a vertical line
       verLine(x, draw_a, draw_b, color);
     }
+
+
+
+
     //timing for input and FPS counter
     oldTime = time;
     time = getTicks();

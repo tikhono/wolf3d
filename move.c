@@ -36,7 +36,7 @@ void	rotate_right(t_all *a)
 	a->d.plane_y = temp * sin(-a->d.rot) + a->d.plane_y * cos(-a->d.rot);
 }
 
-void	move_forw(t_all *a)
+void	move_back(t_all *a)
 {
 	int i;
 	int j;
@@ -59,7 +59,7 @@ void	move_forw(t_all *a)
 		a->d.pos_y += a->d.dir_y * a->d.speed;
 }
 
-void	move_back(t_all *a)
+void	move_forw(t_all *a)
 {
 	int i;
 	int j;

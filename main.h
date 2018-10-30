@@ -1,7 +1,7 @@
 #ifndef MAIN_H
 # define MAIN_H
-# define HEIGHT 777
-# define WIDTH 777
+# define HEIGHT 512
+# define WIDTH 512
 # define BACKGROUND 0xffffff
 
 # include <math.h>
@@ -21,7 +21,6 @@ typedef struct		s_data
 	int				**map;
 	int             hit;
 	int 			side;
-	int				time;
 	int 			step_x;
 	int 			step_y;
 	int				map_x;
@@ -30,6 +29,7 @@ typedef struct		s_data
 	int 			h;
 	int 			draw_a;
 	int 			draw_b;
+	clock_t			time;
 	double			pos_x;
 	double			pos_y;
 	double			dir_x;
