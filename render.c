@@ -66,7 +66,7 @@ void	draw(t_all *a, int x)
 		case 2:  color = 0x0000ff00;  break; //green
 		case 3:  color = 0x000000ff;   break; //blue
 		case 4:  color = 0x00ffffff;  break; //white
-		default: color = 0x0; break; //yellow
+		default: color = 0x00ff0000; break; //yellow
 	}
 	i = a->d.draw_a;
 	while (i < a->d.draw_b)
@@ -81,7 +81,7 @@ void	render(t_all *a)
 	int		x;
 
 	a->d.speed = 0.5;
-	a->d.rot = 0.1;
+	a->d.rot = 0.09;
 	ft_bzero(a->addr, HEIGHT * WIDTH * sizeof(int));
 	x = 0;
 	while (x < WIDTH)

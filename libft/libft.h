@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 19:20:12 by atikhono          #+#    #+#             */
-/*   Updated: 2018/04/08 22:04:07 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/10/30 15:37:04 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,5 +96,6 @@ char				*ft_strsub(char const *s, unsigned int start, size_t len);
 char				*ft_strtrim(char const *s);
 int					ft_tolower(int c);
 int					ft_toupper(int c);
+int					ft_atoi_i(const char *str, int *i);
 
 #endif

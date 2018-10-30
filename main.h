@@ -54,9 +54,6 @@ typedef struct		s_mlx
 	void			*mlx;
 	void			*win;
 	void			*img;
-	int				x;
-	int				y;
-	int				z;
 }					t_mlx;
 
 typedef struct		s_all
@@ -70,7 +67,7 @@ int					call_hookers(int key, t_all *a);
 int					exit_mouse(void);
 void				render(t_all *a);
 void				init(t_all *a, char *file);
-void				parse(t_all *a);
+void				parse_map(t_all *a, char *file);
 void				put_pixel(t_all *a, int x, int y, int color);
 
 void				rotate_left(t_all *a);

@@ -16,10 +16,7 @@ int		call_hookers(int key, t_all *a)
 {
 
 	if (key == 53)
-	{
 		exit(0);
-		return (0);
-	}
 	if (key == 123)
 		rotate_left(a);
 	if (key == 124)
@@ -28,7 +25,6 @@ int		call_hookers(int key, t_all *a)
 		move_forw(a);
 	if (key == 126)
 		move_back(a);
-//	printf("%f %f\t%f\n", a->d.pos_x, a->d.pos_y, a->d.speed);
 	render(a);
 	return (0);
 }
@@ -36,5 +32,4 @@ int		call_hookers(int key, t_all *a)
 int		exit_mouse(void)
 {
 	exit(0);
-	return (0);
 }

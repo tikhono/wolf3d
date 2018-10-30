@@ -12,34 +12,6 @@
 
 #include "main.h"
 
-int map[24][24]=
-{
-  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,2,2,2,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,3,0,0,0,3,0,0,0,1},
-  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,2,2,0,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,0,0,0,5,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
-};
-
 void	put_help(t_all *a)
 {
 	void	*win;
@@ -62,28 +34,72 @@ void	put_help(t_all *a)
 //	a->d.speed = spf * 5.0;
 //	a->d.rot = spf * 3.0;
 
+void	copy_map(t_all *a, char *file, int fd)
+{
+	int 	i;
+	int 	j;
+	int 	k;
+	char	*line;
+
+	i = 0;
+	while (i < a->d.map_h)
+	{
+		j = 0;
+		k = 0;
+		if (!get_next_line(fd, &line))
+		{
+			fprintf(stderr, "Error in %s, incomplete row %d", file, i);
+			exit(-1);
+		}
+		while (j < a->d.map_w)
+		{
+			a->d.map[i][j] = ft_atoi_i(line, &k);
+			printf("%d ", a->d.map[i][j]);
+			++j;
+		}
+		printf("\n");
+		++i;
+	}
+	free(line);
+}
+
+void	parse_map(t_all *a, char *file)
+{
+	int 	fd;
+	int 	i;
+	char	*line;
+
+	fd = open(file, O_RDONLY);
+	if (fd < 0)
+	{
+		fprintf(stderr, "Failed to open: %s\n", file);
+		exit(-1);
+	}
+	get_next_line(fd, &line);
+	a->d.map_w = ft_atoi(line);
+	get_next_line(fd, &line);
+	a->d.map_h = ft_atoi(line);
+	get_next_line(fd, &line);
+	a->d.pos_x = ft_atoi(line);
+	get_next_line(fd, &line);
+	a->d.pos_y = ft_atoi(line);
+	free(line);
+	a->d.map = (int **)malloc(sizeof(int *) * a->d.map_h);
+	i = 0;
+	while (i < a->d.map_w)
+		a->d.map[i++] = (int *)malloc(sizeof(int) * a->d.map_w);
+	copy_map(a, file, fd);
+}
+
 void	init(t_all *a, char *file)
 {
 	int		x;
 	int		y;
 	int		z;
 
-	a->d.map = (int **)malloc(sizeof(int *) * 24);
-	int i = 0;
-	while (i < 24)
-	{
-		a->d.map[i] = (int *)malloc(sizeof(int) * 24);
-		ft_memcpy(a->d.map[i], map[i], sizeof(int) * 24);
-	//	for (int j = 0; j < 24; j++)
-	//		printf("%d ", a->d.map[i][j]);
-	//	printf("\n");
-		++i;
-	}
 	a->d.width = WIDTH;
 	a->d.height = HEIGHT;
 	a->d.h = HEIGHT;
-	a->d.pos_x = 22;
-	a->d.pos_y = 12;
 	a->d.cam_x = 0;
 	a->d.cam_y = 0;
 	a->d.dir_x = -1;
@@ -97,11 +113,6 @@ void	init(t_all *a, char *file)
 	a->addr = (int *)mlx_get_data_addr(a->p.img, &x, &y, &z);
 }
 
-void	parse_map(t_all *a, char *file)
-{
-	a->d.map_w = 24;
-	a->d.map_h = 24;
-}
 
 int		main(int ac, char **av)
 {

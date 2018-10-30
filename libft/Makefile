@@ -6,7 +6,7 @@
 #    By: atikhono <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/10/25 20:12:02 by atikhono          #+#    #+#              #
-#    Updated: 2018/04/08 17:32:23 by atikhono         ###   ########.fr        #
+#    Updated: 2018/10/30 15:23:29 by atikhono         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,7 +77,8 @@ SRC =	ft_memset.c\
 		get_next_line.c\
 		ft_count_chars.c\
 		ft_num_of_rows.c\
-		ft_isnum.c
+		ft_isnum.c\
+		ft_atoi_i.c
 
 OBJ = 	$(SRC:.c=.o)
 
