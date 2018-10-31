@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/29 17:57:48 by atikhono          #+#    #+#             */
-/*   Updated: 2018/10/31 03:17:46 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/10/31 03:25:44 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ void	copy_map(t_all *a, char *file, int fd)
 		while (j < a->d.map_w)
 		{
 			a->d.map[i][j] = ft_atoi_i(line, &k);
+			if (i == 0 || j == 0 || i == a->d.map_h - 1 || j == a->d.map_w - 1)
+				a->d.map[i][j] = 1;
 			++j;
 		}
 		++i;
