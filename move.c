@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/29 11:46:50 by atikhono          #+#    #+#             */
-/*   Updated: 2018/10/31 05:24:09 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/10/31 07:35:19 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	win(t_all *a)
 	mlx_string_put(a->p.mlx, win, 10, 10, 0xFFFFFF, "You beat this!\n");
 	mlx_string_put(a->p.mlx, win, 10, 40, 0xFFFFFF, "Well done!\n");
 	mlx_hook(a->p.win, 17, 1L << 17, exit_mouse, &a);
+	system("afplay ./win.mp3&");
 }
 
 void	rotate_left(t_all *a)

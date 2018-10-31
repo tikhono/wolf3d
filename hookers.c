@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 11:27:07 by atikhono          #+#    #+#             */
-/*   Updated: 2018/10/31 07:27:59 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/10/31 07:38:55 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,10 @@ int		call_hookers(int key, t_all *a)
 	if (key == 3)
 		a->d.trigger = a->d.trigger == 0 ? 1 : 0;
 	if (key == 53)
+	{
+		system("killall afplay");
 		exit(0);
+	}
 	if (key == 123 || key == 0)
 		rotate_left(a);
 	if (key == 124 || key == 2)
@@ -32,5 +35,6 @@ int		call_hookers(int key, t_all *a)
 
 int		exit_mouse(void)
 {
+	system("killall afplay");
 	exit(0);
 }
