@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 02:45:21 by atikhono          #+#    #+#             */
-/*   Updated: 2018/10/31 05:16:36 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/10/31 05:33:48 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,11 @@ void	dda2(t_all *a)
 			a->d.hit = 1;
 	}
 	if (a->d.side == 0)
-		a->d.wall_dist = (a->d.map_x - a->d.pos_x + (1.0 - a->d.step_x) / 2.0) / a->d.ray_dir_x;
+		a->d.wall_dist = (a->d.map_x - a->d.pos_x +
+				(1.0 - a->d.step_x) / 2.0) / a->d.ray_dir_x;
 	else
-		a->d.wall_dist = (a->d.map_y - a->d.pos_y + (1.0 - a->d.step_y) / 2.0) / a->d.ray_dir_y;
+		a->d.wall_dist = (a->d.map_y - a->d.pos_y +
+				(1.0 - a->d.step_y) / 2.0) / a->d.ray_dir_y;
 }
 
 void	dda1(t_all *a)
