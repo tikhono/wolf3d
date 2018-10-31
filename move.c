@@ -6,11 +6,21 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/29 11:46:50 by atikhono          #+#    #+#             */
-/*   Updated: 2018/10/29 14:28:56 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/10/31 05:24:09 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
+
+void	win(t_all *a)
+{
+	void	*win;
+
+	win = mlx_new_window(a->p.mlx, WIDTH, 150, "The end");
+	mlx_string_put(a->p.mlx, win, 10, 10, 0xFFFFFF, "You beat this!\n");
+	mlx_string_put(a->p.mlx, win, 10, 40, 0xFFFFFF, "Well done!\n");
+	mlx_hook(a->p.win, 17, 1L << 17, exit_mouse, &a);
+}
 
 void	rotate_left(t_all *a)
 {
@@ -57,6 +67,8 @@ void	move_back(t_all *a)
 	j = j > a->d.map_w ? a->d.map_w : j;
 	if ((a->d.map[i][j]) == 0)
 		a->d.pos_y += a->d.dir_y * a->d.speed;
+	if ((a->d.map[i][j]) == 7)
+		win(a);
 }
 
 void	move_forw(t_all *a)
@@ -80,4 +92,6 @@ void	move_forw(t_all *a)
 	j = j > a->d.map_w ? a->d.map_w : j;
 	if ((a->d.map[i][j]) == 0)
 		a->d.pos_y -= a->d.dir_y * a->d.speed;
+	if ((a->d.map[i][j]) == 7)
+		win(a);
 }

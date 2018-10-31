@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 02:45:21 by atikhono          #+#    #+#             */
-/*   Updated: 2018/10/31 02:46:06 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/10/31 05:16:36 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,6 @@ void	vert_line(t_all *a, int x)
 		a->d.tex_id = a->d.tex_id > 7 ? 7 : a->d.tex_id;
 		a->d.tex_id = a->d.tex_id < 0 ? 0 : a->d.tex_id;
 		color = a->d.tex[a->d.tex_id][a->d.tex_h * a->d.tex_y + a->d.tex_x];
-	//	if (a->d.side == 1)
-	//		color = (color >> 1) & 8355711;
 		a->addr[WIDTH * y + x] = color;
 		++y;
 	}
