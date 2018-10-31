@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 02:33:10 by atikhono          #+#    #+#             */
-/*   Updated: 2018/10/31 02:34:04 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/10/31 07:28:20 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct		s_data
 	int				tex_y;
 	int				tex_w;
 	int				tex_h;
+	int				trigger;
 	clock_t			time;
 	double			pos_x;
 	double			pos_y;

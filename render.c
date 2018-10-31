@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 02:45:21 by atikhono          #+#    #+#             */
-/*   Updated: 2018/10/31 05:33:48 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/10/31 07:32:37 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,15 @@ void	vert_line(t_all *a, int x)
 		a->d.tex_id = a->d.tex_id > 7 ? 7 : a->d.tex_id;
 		a->d.tex_id = a->d.tex_id < 0 ? 0 : a->d.tex_id;
 		color = a->d.tex[a->d.tex_id][a->d.tex_h * a->d.tex_y + a->d.tex_x];
+		if (a->d.trigger == 0)
+			if (a->d.side == 0 && a->d.ray_dir_x > 0)
+				color = 0xff0000;
+			else if (a->d.side == 0 && a->d.ray_dir_x < 0)
+				color = 0x00ff00;
+			else if (a->d.side == 1 && a->d.ray_dir_y > 0)
+				color = 0x0000ff;
+			else if (a->d.side == 1 && a->d.ray_dir_y < 0)
+				color = 0xffff00;
 		a->addr[WIDTH * y + x] = color;
 		++y;
 	}
