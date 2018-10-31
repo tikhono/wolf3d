@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   render.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/10/31 02:45:21 by atikhono          #+#    #+#             */
+/*   Updated: 2018/10/31 02:46:06 by atikhono         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "main.h"
 
 void	dda2(t_all *a)
@@ -19,10 +31,10 @@ void	dda2(t_all *a)
 		if (a->d.map[a->d.map_x][a->d.map_y] > 0)
 			a->d.hit = 1;
 	}
-    if (a->d.side == 0)
-        a->d.wall_dist = (a->d.map_x - a->d.pos_x + (1.0 - a->d.step_x) / 2.0) / a->d.ray_dir_x;
-    else
-        a->d.wall_dist = (a->d.map_y - a->d.pos_y + (1.0 - a->d.step_y) / 2.0) / a->d.ray_dir_y;
+	if (a->d.side == 0)
+		a->d.wall_dist = (a->d.map_x - a->d.pos_x + (1.0 - a->d.step_x) / 2.0) / a->d.ray_dir_x;
+	else
+		a->d.wall_dist = (a->d.map_y - a->d.pos_y + (1.0 - a->d.step_y) / 2.0) / a->d.ray_dir_y;
 }
 
 void	dda1(t_all *a)
@@ -50,12 +62,29 @@ void	dda1(t_all *a)
 	dda2(a);
 }
 
+void	vert_line(t_all *a, int x)
+{
+	int		y;
+	int		d;
+	int		color;
+
+	y = a->d.draw_a;
+	while (y < a->d.draw_b)
+	{
+		d = y * 256 - a->d.h * 128 + a->d.line_h * 128;
+		a->d.tex_y = ((d * a->d.tex_h) / a->d.line_h) / 256;
+		a->d.tex_id = a->d.tex_id > 7 ? 7 : a->d.tex_id;
+		a->d.tex_id = a->d.tex_id < 0 ? 0 : a->d.tex_id;
+		color = a->d.tex[a->d.tex_id][a->d.tex_h * a->d.tex_y + a->d.tex_x];
+	//	if (a->d.side == 1)
+	//		color = (color >> 1) & 8355711;
+		a->addr[WIDTH * y + x] = color;
+		++y;
+	}
+}
+
 void	draw(t_all *a, int x)
 {
-	int 	y;
-	int 	d;
-	int 	color;
-
 	a->d.line_h = (int)((double)(a->d.h) / a->d.wall_dist);
 	a->d.draw_a = (int)(-a->d.line_h / 2.0 + (double)(a->d.h) / 2.0);
 	a->d.draw_a = a->d.draw_a < 0 ? 0 : a->d.draw_a;
@@ -72,20 +101,7 @@ void	draw(t_all *a, int x)
 		a->d.tex_x = a->d.tex_w - a->d.tex_x - 1;
 	if (a->d.side == 1 && a->d.ray_dir_y < 0)
 		a->d.tex_x = a->d.tex_w - a->d.tex_x - 1;
-	y = a->d.draw_a;
-	while (y < a->d.draw_b)
-	{
-		d = y * 256 - a->d.h * 128 + a->d.line_h * 128;
-		a->d.tex_y = ((d * a->d.tex_h) / a->d.line_h) / 256;
-
-		a->d.tex_id = a->d.tex_id > 7 ? 7 : a->d.tex_id;
-		a->d.tex_id = a->d.tex_id < 0 ? 0 : a->d.tex_id;
-		color = a->d.tex[a->d.tex_id][a->d.tex_h * a->d.tex_y + a->d.tex_x];
-	//	if (a->d.side == 1)
-	//		color = (color >> 1) & 8355711;
-		a->addr[WIDTH * y + x] = color;
-		++y;
-	}
+	vert_line(a, x);
 }
 
 void	render(t_all *a)

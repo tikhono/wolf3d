@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/10/31 02:33:10 by atikhono          #+#    #+#             */
+/*   Updated: 2018/10/31 02:34:04 by atikhono         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MAIN_H
 # define MAIN_H
 # define HEIGHT 512
@@ -19,22 +31,22 @@ typedef struct		s_data
 	int				map_w;
 	int				map_h;
 	int				**map;
-	int 			**tex;
-	int             hit;
-	int 			side;
-	int 			step_x;
-	int 			step_y;
+	int				**tex;
+	int				hit;
+	int				side;
+	int				step_x;
+	int				step_y;
 	int				map_x;
 	int				map_y;
-	int 			line_h;
-	int 			h;
-	int 			draw_a;
-	int 			draw_b;
-	int 			tex_id;
-	int 			tex_x;
-	int 			tex_y;
-	int 			tex_w;
-	int 			tex_h;
+	int				line_h;
+	int				h;
+	int				draw_a;
+	int				draw_b;
+	int				tex_id;
+	int				tex_x;
+	int				tex_y;
+	int				tex_w;
+	int				tex_h;
 	clock_t			time;
 	double			pos_x;
 	double			pos_y;

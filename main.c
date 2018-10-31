@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/10 15:56:24 by atikhono          #+#    #+#             */
-/*   Updated: 2018/10/30 19:11:21 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/10/31 02:36:58 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,14 @@ void	put_help(t_all *a)
 	mlx_hook(a->p.win, 17, 1L << 17, exit_mouse, &a);
 }
 
-//	int		temp_time;
-//	double	spf;
-
-//	temp_time = clock();
-//	spf = (temp_time - a->d.time) / 100000.0;
-//	a->d.time = temp_time;
-//	a->d.speed = spf * 5.0;
-//	a->d.rot = spf * 3.0;
-
+/* int		temp_time;
+ * double	spf;
+ * temp_time = clock();
+ * spf = (temp_time - a->d.time) / 100000.0;
+ * a->d.time = temp_time;
+ * a->d.speed = spf * 5.0;
+ * a->d.rot = spf * 3.0;
+ */
 
 void	init(t_all *a, char *file)
 {
@@ -58,7 +57,6 @@ void	init(t_all *a, char *file)
 	a->addr = (int *)mlx_get_data_addr(a->p.img, &x, &y, &z);
 }
 
-
 int		main(int ac, char **av)
 {
 	t_all	a;
@@ -73,7 +71,7 @@ int		main(int ac, char **av)
 	--ac;
 	init(&a, av[ac]);
 	parse_map(&a, av[ac]);
-//	put_help(&a);
+	put_help(&a);
 	render(&a);
 	mlx_hook(a.p.win, 2, 5, call_hookers, &a);
 	mlx_hook(a.p.win, 17, 1L << 17, exit_mouse, &a);
