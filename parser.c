@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/29 17:57:48 by atikhono          #+#    #+#             */
-/*   Updated: 2018/10/31 02:40:28 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/10/31 03:17:46 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,30 +67,45 @@ void	parse_metadata(t_all *a, char *file, int fd, char *line)
 	free(line);
 }
 
-void	parse_tex(t_all *a)
+void	get_addr(t_all *a, int num, void *lol)
 {
 	int		x;
 	int		y;
 	int		z;
+
+	if (lol == NULL)
+	{
+		fprintf(stderr, "Texture number %d missing", num);
+		exit(-1);
+	}
+	a->d.tex[num] = (int *)mlx_get_data_addr(lol, &x, &y, &z);
+}
+
+void	parse_tex(t_all *a)
+{
+	int		x;
+	int		y;
+	int		num;
 	void	*lol;
 
+	num = 0;
 	a->d.tex = (int **)malloc(sizeof(int *) * 8);
-	lol = mlx_xpm_file_to_image(a->p.mlx, "./greystone.xpm", &x, &y);
-	a->d.tex[0] = (int *)mlx_get_data_addr(lol, &x, &y, &z);
-	lol = mlx_xpm_file_to_image(a->p.mlx, "./greystone.xpm", &x, &y);
-	a->d.tex[1] = (int *)mlx_get_data_addr(lol, &x, &y, &z);
-	lol = mlx_xpm_file_to_image(a->p.mlx, "./greystone.xpm", &x, &y);
-	a->d.tex[2] = (int *)mlx_get_data_addr(lol, &x, &y, &z);
-	lol = mlx_xpm_file_to_image(a->p.mlx, "./greystone.xpm", &x, &y);
-	a->d.tex[3] = (int *)mlx_get_data_addr(lol, &x, &y, &z);
-	lol = mlx_xpm_file_to_image(a->p.mlx, "./greystone.xpm", &x, &y);
-	a->d.tex[4] = (int *)mlx_get_data_addr(lol, &x, &y, &z);
-	lol = mlx_xpm_file_to_image(a->p.mlx, "./greystone.xpm", &x, &y);
-	a->d.tex[5] = (int *)mlx_get_data_addr(lol, &x, &y, &z);
-	lol = mlx_xpm_file_to_image(a->p.mlx, "./greystone.xpm", &x, &y);
-	a->d.tex[6] = (int *)mlx_get_data_addr(lol, &x, &y, &z);
-	lol = mlx_xpm_file_to_image(a->p.mlx, "./greystone.xpm", &x, &y);
-	a->d.tex[7] = (int *)mlx_get_data_addr(lol, &x, &y, &z);
+	lol = mlx_xpm_file_to_image(a->p.mlx, "./textures/barrel.xpm", &x, &y);
+	get_addr(a, num++, lol);
+	lol = mlx_xpm_file_to_image(a->p.mlx, "./textures/greystone.xpm", &x, &y);
+	get_addr(a, num++, lol);
+	lol = mlx_xpm_file_to_image(a->p.mlx, "./textures/bluestone.xpm", &x, &y);
+	get_addr(a, num++, lol);
+	lol = mlx_xpm_file_to_image(a->p.mlx, "./textures/colorstone.xpm", &x, &y);
+	get_addr(a, num++, lol);
+	lol = mlx_xpm_file_to_image(a->p.mlx, "./textures/purpulstone.xpm", &x, &y);
+	get_addr(a, num++, lol);
+	lol = mlx_xpm_file_to_image(a->p.mlx, "./textures/redbrick.xpm", &x, &y);
+	get_addr(a, num++, lol);
+	lol = mlx_xpm_file_to_image(a->p.mlx, "./textures/wood.xpm", &x, &y);
+	get_addr(a, num++, lol);
+	lol = mlx_xpm_file_to_image(a->p.mlx, "./textures/eagle.xpm", &x, &y);
+	get_addr(a, num, lol);
 }
 
 void	parse_map(t_all *a, char *file)
