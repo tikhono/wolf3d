@@ -1,4 +1,4 @@
 .*
-libft/*
+./libft/*
 *.o
 wolf3d
