@@ -48,9 +48,9 @@ void	parse_metadata(t_all *a, char *file, int fd, char *line)
 	get_next_line(fd, &line);
 	a->d.map_h = ft_atoi(line);
 	get_next_line(fd, &line);
-	a->d.pos_x = ft_atoi(line);
+	a->d.pos_x = ft_atoi(line) + 0.5;
 	get_next_line(fd, &line);
-	a->d.pos_y = ft_atoi(line);
+	a->d.pos_y = ft_atoi(line) + 0.5;
 	if (a->d.map_w <= 3 || a->d.map_h <= 3)
 	{
 		fprintf(stderr, "Failed to open: %s, wrong map size", file);
@@ -61,7 +61,7 @@ void	parse_metadata(t_all *a, char *file, int fd, char *line)
 		fprintf(stderr, "Position can`t be beyond of map");
 		exit(-1);
 	}
-	if (a->d.pos_x > a->d.map_w || a->d.pos_y > a->d.map_h)
+	if (a->d.pos_x >= a->d.map_w || a->d.pos_y >= a->d.map_h)
 	{
 		fprintf(stderr, "Position can`t be beyond of map");
 		exit(-1);
