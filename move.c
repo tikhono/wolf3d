@@ -49,50 +49,54 @@ void	rotate_right(t_all *a)
 
 void	move_back(t_all *a)
 {
-	int i;
-	int j;
+	double	i;
+	double	j;
+	double	x;
+	double	y;
 
-	i = (int)(a->d.pos_x + a->d.dir_x * a->d.speed);
-	i = i < 0 ? 0 : i;
-	i = i > a->d.map_h ? a->d.map_h : i;
-	j = (int)(a->d.pos_y);
-	j = j < 0 ? 0 : j;
-	j = j > a->d.map_w ? a->d.map_w : j;
-	if ((a->d.map[i][j]) == 0)
+	x = a->d.pos_x;
+	y = a->d.pos_y;
+	if (a->d.dir_x >= 0)
+		i = x + 2 * a->d.speed;
+	else
+		i = x - 2 * a->d.speed;
+	j = y;
+	if ((a->d.map[(int)(i)][(int)(j)]) == 0)
 		a->d.pos_x += a->d.dir_x * a->d.speed;
-	i = (int)(a->d.pos_x);
-	i = i < 0 ? 0 : i;
-	i = i > a->d.map_h ? a->d.map_h : i;
-	j = (int)(a->d.pos_y + a->d.dir_y * a->d.speed);
-	j = j < 0 ? 0 : j;
-	j = j > a->d.map_w ? a->d.map_w : j;
-	if ((a->d.map[i][j]) == 0)
+	i = x;
+	if (a->d.dir_y >= 0)
+		j = y + 2 * a->d.speed;
+	else
+		j = y - 2 * a->d.speed;
+	if ((a->d.map[(int)(i)][(int)(j)]) == 0)
 		a->d.pos_y += a->d.dir_y * a->d.speed;
-	if ((a->d.map[i][j]) == 7)
+	if ((a->d.map[(int)(i)][(int)(j)]) == 7)
 		win(a);
 }
 
 void	move_forw(t_all *a)
 {
-	int i;
-	int j;
+	double	i;
+	double	j;
+	double	x;
+	double	y;
 
-	i = (int)(a->d.pos_x - a->d.dir_x * a->d.speed);
-	i = i < 0 ? 0 : i;
-	i = i > a->d.map_h ? a->d.map_h : i;
-	j = (int)(a->d.pos_y);
-	j = j < 0 ? 0 : j;
-	j = j > a->d.map_w ? a->d.map_w : j;
-	if ((a->d.map[i][j]) == 0)
+	x = a->d.pos_x;
+	y = a->d.pos_y;
+	if (a->d.dir_x < 0)
+		i = x + 2 * a->d.speed;
+	else
+		i = x - 2 * a->d.speed;
+	j = y;
+	if ((a->d.map[(int)(i)][(int)(j)]) == 0)
 		a->d.pos_x -= a->d.dir_x * a->d.speed;
-	i = (int)(a->d.pos_x);
-	i = i < 0 ? 0 : i;
-	i = i > a->d.map_h ? a->d.map_h : i;
-	j = (int)(a->d.pos_y - a->d.dir_y * a->d.speed);
-	j = j < 0 ? 0 : j;
-	j = j > a->d.map_w ? a->d.map_w : j;
-	if ((a->d.map[i][j]) == 0)
+	i = x;
+	if (a->d.dir_y < 0)
+		j = y + 2 * a->d.speed;
+	else
+		j = y - 2 * a->d.speed;
+	if ((a->d.map[(int)(i)][(int)(j)]) == 0)
 		a->d.pos_y -= a->d.dir_y * a->d.speed;
-	if ((a->d.map[i][j]) == 7)
+	if ((a->d.map[(int)(i)][(int)(j)]) == 7)
 		win(a);
 }
