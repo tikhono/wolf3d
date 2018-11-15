@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 02:45:21 by atikhono          #+#    #+#             */
-/*   Updated: 2018/10/31 07:32:37 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/11/08 16:54:11 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,10 @@ void	dda1(t_all *a)
 	dda2(a);
 }
 
-void	vert_line(t_all *a, int x)
+void	vert_line(t_all *a, int x, int color)
 {
 	int		y;
 	int		d;
-	int		color;
 
 	y = a->d.draw_a;
 	while (y < a->d.draw_b)
@@ -79,6 +78,7 @@ void	vert_line(t_all *a, int x)
 		a->d.tex_id = a->d.tex_id < 0 ? 0 : a->d.tex_id;
 		color = a->d.tex[a->d.tex_id][a->d.tex_h * a->d.tex_y + a->d.tex_x];
 		if (a->d.trigger == 0)
+		{
 			if (a->d.side == 0 && a->d.ray_dir_x > 0)
 				color = 0xff0000;
 			else if (a->d.side == 0 && a->d.ray_dir_x < 0)
@@ -87,6 +87,7 @@ void	vert_line(t_all *a, int x)
 				color = 0x0000ff;
 			else if (a->d.side == 1 && a->d.ray_dir_y < 0)
 				color = 0xffff00;
+		}
 		a->addr[WIDTH * y + x] = color;
 		++y;
 	}
@@ -94,6 +95,9 @@ void	vert_line(t_all *a, int x)
 
 void	draw(t_all *a, int x)
 {
+	int		color;
+
+	color = 0;
 	a->d.line_h = (int)((double)(a->d.h) / a->d.wall_dist);
 	a->d.draw_a = (int)(-a->d.line_h / 2.0 + (double)(a->d.h) / 2.0);
 	a->d.draw_a = a->d.draw_a < 0 ? 0 : a->d.draw_a;
@@ -110,7 +114,7 @@ void	draw(t_all *a, int x)
 		a->d.tex_x = a->d.tex_w - a->d.tex_x - 1;
 	if (a->d.side == 1 && a->d.ray_dir_y < 0)
 		a->d.tex_x = a->d.tex_w - a->d.tex_x - 1;
-	vert_line(a, x);
+	vert_line(a, x, color);
 }
 
 void	render(t_all *a)

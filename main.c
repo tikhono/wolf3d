@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/10 15:56:24 by atikhono          #+#    #+#             */
-/*   Updated: 2018/10/31 07:35:48 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/10/31 07:55:07 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	put_help(t_all *a)
 	mlx_string_put(a->p.mlx, win, 10, 50, 0xFFFFFF, "You are prisoner!\n");
 	mlx_string_put(a->p.mlx, win, 10, 90, 0xFFFFFF, "Find sighn and FREEDOM\n");
 	mlx_hook(a->p.win, 17, 1L << 17, exit_mouse, &a);
+	system("kill all afplay");
 	system("afplay start.mp3&");
 }
 

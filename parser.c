@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/29 17:57:48 by atikhono          #+#    #+#             */
-/*   Updated: 2018/10/31 05:14:35 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/11/12 13:11:07 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@ void	copy_map(t_all *a, char *file, int fd)
 	i = 0;
 	while (i < a->d.map_h)
 	{
-		j = 0;
-		k = 0;
 		if (!get_next_line(fd, &line))
 		{
 			fprintf(stderr, "Error in %s, incomplete row %d", file, i);
 			exit(-1);
 		}
+		j = 0;
+		k = 0;
 		while (j < a->d.map_w)
 		{
 			a->d.map[i][j] = ft_atoi_i(line, &k);
@@ -51,7 +51,7 @@ void	parse_metadata(t_all *a, char *file, int fd, char *line)
 	a->d.pos_x = ft_atoi(line) + 0.5;
 	get_next_line(fd, &line);
 	a->d.pos_y = ft_atoi(line) + 0.5;
-	if (a->d.map_w <= 3 || a->d.map_h <= 3)
+	if (a->d.map_w < 3 || a->d.map_h < 3)
 	{
 		fprintf(stderr, "Failed to open: %s, wrong map size", file);
 		exit(-1);
@@ -125,8 +125,11 @@ void	parse_map(t_all *a, char *file)
 	parse_metadata(a, file, fd, line);
 	a->d.map = (int **)malloc(sizeof(int *) * a->d.map_h);
 	i = 0;
-	while (i < a->d.map_w)
-		a->d.map[i++] = (int *)malloc(sizeof(int) * a->d.map_w);
+	while (i < a->d.map_h)
+	{
+		a->d.map[i] = (int *)malloc(sizeof(int) * a->d.map_w);
+		ft_bzero(a->d.map[i++], sizeof(int) * a->d.map_w);
+	}
 	copy_map(a, file, fd);
 	if (a->d.map[(int)(a->d.pos_x)][(int)(a->d.pos_y)] != 0)
 	{

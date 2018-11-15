@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 11:27:07 by atikhono          #+#    #+#             */
-/*   Updated: 2018/10/31 07:38:55 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/10/31 07:56:07 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int		call_hookers(int key, t_all *a)
 		a->d.trigger = a->d.trigger == 0 ? 1 : 0;
 	if (key == 53)
 	{
-		system("killall afplay");
+		system("killall afplay&");
 		exit(0);
 	}
 	if (key == 123 || key == 0)
@@ -35,6 +35,6 @@ int		call_hookers(int key, t_all *a)
 
 int		exit_mouse(void)
 {
-	system("killall afplay");
+	system("killall afplay&");
 	exit(0);
 }
